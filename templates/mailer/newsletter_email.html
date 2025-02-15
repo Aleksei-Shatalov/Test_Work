@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ newsletter.subject }}</title>
+    <title>{{ mailing.subject }}</title>
 </head>
 <body>
-    <h1>{{ newsletter.subject }}</h1>
-    <p>{{ newsletter.body }}</p>
+    <h1>{{ mailing.subject }}</h1>
+    <p>Здравствуйте, {{ subscriber.first_name }} {{ subscriber.last_name }}!</p>
+    {% if subscriber.birthday %}
+        <p>Ваш день рождения: {{ subscriber.birthday }}</p>
+    {% endif %}
+    <p>{{ mailing.body }}</p>
+
+    <img src="http://127.0.0.1:8000/mailer/track/{{ mailing.id }}/{{ subscriber.tracking_token }}/" alt="" width="1" height="1" style="border:none;">
 </body>
 </html>

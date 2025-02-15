@@ -5,7 +5,10 @@ from .models import Mailing, Subscriber
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 import logging
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 logger = logging.getLogger(__name__)
 
 @shared_task
@@ -19,14 +22,17 @@ def send_newsletter(mailing_id):
     subscribers = mailing.subscribers.all()
 
     for subscriber in subscribers:
-        html_message = render_to_string('mailer/newsletter_email.html', {'newsletter': mailing})
+        html_message = render_to_string('mailer/newsletter_email.html', {
+            'mailing': mailing,
+            'subscriber': subscriber,
+        })
         plain_message = strip_tags(html_message)
 
         try:
             send_mail(
                 mailing.subject,
                 plain_message,
-                'from@example.com',
+                [os.getenv('EMAIL_HOST_USER')],
                 [subscriber.email],
                 fail_silently = False,
                 html_message=html_message,
