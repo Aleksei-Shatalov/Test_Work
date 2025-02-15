@@ -1,0 +1,124 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createMailingModal">
+        Открыть модальное окно
+    </button>
+
+    <div class="modal fade" id="createMailingModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Создание рассылки</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="message" class="alert" style="display:none;"></div>
+                    <form id="createMailingForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="subject">Тема:</label>
+                            <input type="text" class="form-control" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="body">Сообщение:</label>
+                            <textarea class="form-control" name="body" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Подписчики:</label>
+                            {% for subscriber in form.subscribers.field.queryset %}
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="subscribers" value="{{ subscriber.id }}">
+                                    {{ subscriber.email }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label for="scheduled_time">Время отправки:</label>
+                            {{ form.scheduled_time }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Создать</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+{{ block.super }}
+<script>
+$(document).ready(function() {
+    // Инициализация обработчика формы
+    $('#createMailingForm').on('submit', function(e) {
+        e.preventDefault();
+        console.log('Form submitted');
+
+        var form = $(this);
+        var url = form.attr('action');
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if(response.status === 'success') {
+                    $('#message')
+                        .removeClass('alert-danger')
+                        .addClass('alert-success')
+                        .text(response.message)
+                        .fadeIn();
+
+                    setTimeout(function() {
+                        $('#createMailingModal').modal('hide');
+                        form[0].reset();
+                        $('#message').fadeOut();
+                    }, 2000);
+                } else {
+                    $('#message')
+                        .removeClass('alert-success')
+                        .addClass('alert-danger')
+                        .text('Ошибка: ' + response.errors)
+                        .fadeIn();
+                }
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr.responseText);
+            }
+        });
+    });
+
+    // Сброс формы при открытии модального окна
+    $('#createMailingModal').on('show.bs.modal', function() {
+        $('#createMailingForm')[0].reset();
+        $('#message').hide();
+    });
+});
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

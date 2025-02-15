@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Все рассылки</h2>
+  <ul>
+    {% for mailing in mailings %}
+      <li>
+        <a href="{% url 'mailing_detail' mailing.id %}">Detail for {{ mailing.id }}: {{ mailing.subject }}</a>
+      </li>
+    {% empty %}
+      <li>Нет созданных рассылок.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

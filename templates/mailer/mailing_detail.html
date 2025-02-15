@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>{{ mailing.subject }}</h2>
+  <p><strong>Тема:</strong> {{ mailing.subject }}</p>
+  <p><strong>Текст:</strong> {{ mailing.body }}</p>
+  <p><strong>Статус:</strong> {{ mailing.get_status_display }}</p>
+  <p><strong>Время отправки:</strong> {{ mailing.scheduled_time }}</p>
+  <p><strong>Подписчики:</strong></p>
+  <ul>
+    {% for subscriber in mailing.subscribers.all %}
+      <li>{{ subscriber.email }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

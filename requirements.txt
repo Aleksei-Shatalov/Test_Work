@@ -1,0 +1,5 @@
+python-2.7
+Django-1.9.9
+celery-3.1.25
+redis-2.10.6
+python-dotenv-0.18.0

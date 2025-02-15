@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Site{% endblock %}</title>
+    <!-- Подключаем совместимые версии jQuery и Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="container">
+        <h1>My Site Header</h1>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="container">
+        <p>My Site Footer</p>
+    </footer>
+
+    <!-- Подключаем jQuery и Bootstrap -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    <script>
+        console.log("Проверка подключения jQuery:", typeof jQuery);
+        console.log("Проверка подключения Bootstrap modal:", typeof $.fn.modal);
+    </script>
+
+    {% block javascript %}{% endblock %}
+</body>
+</html>
+
+
